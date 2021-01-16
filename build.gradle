@@ -1,0 +1,45 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'maven'
+}
+
+group 'org.eot'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    implementation 'org.testng:testng:6+'
+    compile 'com.applitools:eyes-selenium-java3:+'
+    compile 'io.github.bonigarcia:webdrivermanager:+'
+}
+
+project.ext.logDir = "${rootDir}/reports"
+
+test {
+    useTestNG() {
+        reports.html.enabled = true
+        reports.html.setDestination(file("${project.logDir}/html"))
+
+        reports.junitXml.enabled = true
+        reports.junitXml.setDestination(file("${project.logDir}/junit"))
+        testLogging {
+            events "started", "passed", "skipped", "failed"
+            // show standard out and standard error of the test JVM(s) on the console
+            showStandardStreams = true
+            // show full exception trace
+            exceptionFormat = 'full'
+            showStackTraces = true
+            showCauses = true
+            showExceptions = true
+        }
+    }
+}
+
+wrapper {
+    gradleVersion = 6.7
+}
